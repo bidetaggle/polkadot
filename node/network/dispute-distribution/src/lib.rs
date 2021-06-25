@@ -15,6 +15,8 @@
 // along with Polkadot.  If not, see <http://www.gnu.org/licenses/>.
 
 
+use std::time::SystemTime;
+
 /// Sending and receiving of `DisputeRequest`s.
 
 use futures::channel::{mpsc, oneshot};
@@ -111,8 +113,22 @@ impl DisputeDistributionSubsystem {
 	where
 		Context: SubsystemContext<Message = DisputeDistributionMessage> + Sync + Send,
 	{
+		let mut start_processing = SystemTime::now();
 		loop {
+			let now = SystemTime::now();
+			tracing::trace!(
+				target: LOG_TARGET,
+				elapsed = ?start_processing.elapsed().unwrap().as_millis(),
+				"Waiting for message"
+			);
 			let message = Message::receive(&mut ctx, &mut self.sender_rx).await;
+			tracing::trace!(
+				target: LOG_TARGET,
+				elapsed = ?now.elapsed().unwrap().as_millis(),
+				?message,
+				"Got message"
+			);
+			start_processing = SystemTime::now();
 			match message {
 				Message::Subsystem(result) => {
 					let result = match result? {
@@ -175,6 +191,7 @@ impl DisputeDistributionSubsystem {
 			// This message will only arrive once:
 			DisputeDistributionMessage::DisputeSendingReceiver(receiver) => {
 				let (tx, rx) = oneshot::channel();
+				let now = SystemTime::now();
 				ctx.send_message(
 					AllMessages::NetworkBridge(
 						NetworkBridgeMessage::GetAuthorityDiscoveryService(tx)
@@ -183,6 +200,11 @@ impl DisputeDistributionSubsystem {
 				let service = rx
 					.await
 					.map_err(|_| Fatal::CanceledOneshot("get_authority_discovery_service"))?;
+				tracing::trace!(
+					target: LOG_TARGET,
+					elapsed = ?now.elapsed().unwrap().as_millis(),
+					"send_message + rx.await"
+				);
 
 				let receiver = DisputesReceiver::new(ctx.sender().clone(), receiver, service);
 				ctx

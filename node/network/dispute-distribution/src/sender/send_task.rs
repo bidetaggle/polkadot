@@ -126,6 +126,12 @@ impl SendTask
 	) -> Result<()> {
 		let new_authorities = self.get_relevant_validators(ctx, runtime, active_sessions).await?;
 
+		tracing::trace!(
+			target: LOG_TARGET,
+			?new_authorities,
+			"Got authorities"
+		);
+
 		let add_authorities = new_authorities
 			.iter()
 			.filter(|a| !self.deliveries.contains_key(a))
@@ -134,6 +140,12 @@ impl SendTask
 
 		// Get rid of dead/irrelevant tasks/statuses:
 		self.deliveries.retain(|k, _| new_authorities.contains(k));
+
+		tracing::trace!(
+			target: LOG_TARGET,
+			?add_authorities,
+			"send_requests"
+		);
 
 		// Start any new tasks that are needed:
 		let new_statuses = send_requests(
@@ -270,7 +282,15 @@ async fn send_requests<Context: SubsystemContext>(
 		// We should be connected, but the hell - if not, try!
 		IfDisconnected::TryConnect,
 	);
+	tracing::trace!(
+		target: LOG_TARGET,
+		"Sending out network request"
+	);
 	ctx.send_message(AllMessages::NetworkBridge(msg)).await;
+	tracing::trace!(
+		target: LOG_TARGET,
+		"Sent out network request"
+	);
 	Ok(statuses)
 }
 

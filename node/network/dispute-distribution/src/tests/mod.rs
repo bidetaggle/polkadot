@@ -19,6 +19,7 @@
 
 use std::collections::HashSet;
 use std::sync::Arc;
+use std::time::SystemTime;
 
 use assert_matches::assert_matches;
 use futures::{Future, channel::mpsc};
@@ -190,14 +191,21 @@ async fn handle_subsystem_startup(
 	handle: &mut TestSubsystemContextHandle<DisputeDistributionMessage>
 ) -> (mpsc::Sender<sc_network::config::IncomingRequest>, MockAuthorityDiscovery) {
 	let (request_tx, request_rx) = mpsc::channel(5);
+	let now = SystemTime::now();
 	handle.send(
 		FromOverseer::Communication {
 			msg: DisputeDistributionMessage::DisputeSendingReceiver(request_rx),
 		}
 	).await;
+	tracing::trace!(
+		target: LOG_TARGET,
+		elapsed = ?now.elapsed().unwrap().as_millis(),
+		"handle.send"
+	);
 
 	let authority_discovery = MockAuthorityDiscovery::new();
 
+	let now = SystemTime::now();
 	assert_matches!(
 		handle.recv().await,
 		AllMessages::NetworkBridge(
@@ -207,6 +215,11 @@ async fn handle_subsystem_startup(
 				.send(Box::new(authority_discovery.clone()))
 				.expect("Receiver shoult still be alive.");
 		}
+	);
+	tracing::trace!(
+		target: LOG_TARGET,
+		elapsed = ?now.elapsed().unwrap().as_millis(),
+		"Receiving and tx in test"
 	);
 	activate_leaf(handle, Hash::random(), MOCK_SESSION_INDEX, Some(make_session_info()), Vec::new()).await;
 	(request_tx, authority_discovery)
