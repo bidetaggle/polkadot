@@ -21,19 +21,19 @@ bp-header-chain = { path = "../../primitives/header-chain", default-features = f
 
 # Substrate Dependencies
 
-frame-support = { git = "https://github.com/paritytech/substrate", branch = "master" , default-features = false }
-frame-system = { git = "https://github.com/paritytech/substrate", branch = "master" , default-features = false }
-sp-finality-grandpa = { git = "https://github.com/paritytech/substrate", branch = "master" , default-features = false }
-sp-runtime = { git = "https://github.com/paritytech/substrate", branch = "master" , default-features = false }
-sp-std = { git = "https://github.com/paritytech/substrate", branch = "master" , default-features = false }
-sp-trie = { git = "https://github.com/paritytech/substrate", branch = "master" , default-features = false }
+frame-support = { git = "https://github.com/paritytech/substrate", default-features = false , rev = "04ee46218451502fb5605106fca1080cccdc80cb" }
+frame-system = { git = "https://github.com/paritytech/substrate", default-features = false , rev = "04ee46218451502fb5605106fca1080cccdc80cb" }
+sp-finality-grandpa = { git = "https://github.com/paritytech/substrate", default-features = false , rev = "04ee46218451502fb5605106fca1080cccdc80cb" }
+sp-runtime = { git = "https://github.com/paritytech/substrate", default-features = false , rev = "04ee46218451502fb5605106fca1080cccdc80cb" }
+sp-std = { git = "https://github.com/paritytech/substrate", default-features = false , rev = "04ee46218451502fb5605106fca1080cccdc80cb" }
+sp-trie = { git = "https://github.com/paritytech/substrate", default-features = false , rev = "04ee46218451502fb5605106fca1080cccdc80cb" }
 
 # Optional Benchmarking Dependencies
 bp-test-utils = { path = "../../primitives/test-utils", default-features = false, optional = true }
-frame-benchmarking = { git = "https://github.com/paritytech/substrate", branch = "master" , default-features = false, optional = true }
+frame-benchmarking = { git = "https://github.com/paritytech/substrate", default-features = false, optional = true , rev = "04ee46218451502fb5605106fca1080cccdc80cb" }
 
 [dev-dependencies]
-sp-io = { git = "https://github.com/paritytech/substrate", branch = "master" }
+sp-io = { git = "https://github.com/paritytech/substrate", rev = "04ee46218451502fb5605106fca1080cccdc80cb" }
 
 [features]
 default = ["std"]

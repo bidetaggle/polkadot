@@ -22,4 +22,4 @@ time = "0.2"
 
 # Substrate dependencies
 
-substrate-prometheus-endpoint = { git = "https://github.com/paritytech/substrate", branch = "master" }
+substrate-prometheus-endpoint = { git = "https://github.com/paritytech/substrate", rev = "04ee46218451502fb5605106fca1080cccdc80cb" }

@@ -17,9 +17,9 @@ millau-runtime = { path = "../../bin/millau/runtime" }
 
 # Substrate Dependencies
 
-frame-support = { git = "https://github.com/paritytech/substrate", branch = "master" }
-frame-system = { git = "https://github.com/paritytech/substrate", branch = "master" }
-pallet-transaction-payment = { git = "https://github.com/paritytech/substrate", branch = "master" }
-sp-core = { git = "https://github.com/paritytech/substrate", branch = "master" }
-sp-keyring = { git = "https://github.com/paritytech/substrate", branch = "master" }
-sp-runtime = { git = "https://github.com/paritytech/substrate", branch = "master" }
+frame-support = { git = "https://github.com/paritytech/substrate", rev = "04ee46218451502fb5605106fca1080cccdc80cb" }
+frame-system = { git = "https://github.com/paritytech/substrate", rev = "04ee46218451502fb5605106fca1080cccdc80cb" }
+pallet-transaction-payment = { git = "https://github.com/paritytech/substrate", rev = "04ee46218451502fb5605106fca1080cccdc80cb" }
+sp-core = { git = "https://github.com/paritytech/substrate", rev = "04ee46218451502fb5605106fca1080cccdc80cb" }
+sp-keyring = { git = "https://github.com/paritytech/substrate", rev = "04ee46218451502fb5605106fca1080cccdc80cb" }
+sp-runtime = { git = "https://github.com/paritytech/substrate", rev = "04ee46218451502fb5605106fca1080cccdc80cb" }
